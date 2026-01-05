@@ -2,79 +2,81 @@ import streamlit as st
 import random
 import time
 
-def high_speed_wheel():
+# පිටුවේ මූලික සැකසුම්
+st.set_page_config(page_title="Mega Wheel", page_icon="🎡")
+
+def mega_wheel():
     st.title("🎡 BusinessBook Mega Wheel")
     st.write("1000 සිට 6000 දක්වා දිනාගන්න! ඉතා වේගයෙන් කැරකේ.")
 
-    # ඉලක්කම් සහ වර්ණ (1000, 2000, 3000, 4000, 5000, 6000)
-    prizes = [
-        {"val": "1000", "color": "#FF0000"}, # Red
-        {"val": "2000", "color": "#FF8C00"}, # Orange
-        {"val": "3000", "color": "#FFFF00"}, # Yellow
-        {"val": "4000", "color": "#00FF00"}, # Green
-        {"val": "5000", "color": "#00BFFF"}, # Blue
-        {"val": "6000", "color": "#8A2BE2"}  # Purple
-    ]
+    # තෑගි සහ වර්ණ
+    prizes = ["1000", "2000", "3000", "4000", "5000", "6000"]
+    colors = ["#FF4B4B", "#FFA500", "#FFD700", "#00C851", "#33b5e5", "#aa66cc"]
 
     if st.button("SPIN MEGA WHEEL! 🔥"):
-        # වට ගණන ගොඩක් වැඩි කළා (3600 සිට 7200 දක්වා - ඒ කියන්නේ වට 10ක් 20ක් විතර)
-        rotation = random.randint(3600, 7200) 
+        # වට ගණන වැඩි කිරීමට (අංශක 2000 සිට 5000 දක්වා)
+        rotation = random.randint(2000, 5000)
         
-        # ඉලක්කම් රෝදය ඇතුළේ පෙන්වන HTML කොටස
-        # රෝදය කැරකෙන වේගය තත්පර 5ක් ලෙස දී ඇත (Transition: 5s)
-        wheel_segments = ""
-        for i, p in enumerate(prizes):
-            angle = i * 60
-            wheel_segments += f"""
-            <div style="position: absolute; width: 50%; height: 50%; background: {p['color']};
-                        transform-origin: 100% 100%; transform: rotate({angle}deg) skewY(-30deg);
-                        border: 1px solid #333;">
-            </div>
-            <div style="position: absolute; width: 100%; height: 100%; text-align: center;
-                        transform: rotate({angle + 30}deg); color: black; font-weight: bold;
-                        padding-top: 20px; font-size: 20px;">
-                {p['val']}
-            </div>
-            """
+        # රෝදය ඇතුළේ පාට (Conic Gradient පාවිච්චි කරලා ලේසියෙන්ම හදමු)
+        # මෙය පින්තූරයේ තිබූ විදිහටම පාට 6 ලස්සනට පෙන්වයි
+        gradient = f"""
+            conic-gradient(
+                {colors[0]} 0deg 60deg, 
+                {colors[1]} 60deg 120deg, 
+                {colors[2]} 120deg 180deg, 
+                {colors[3]} 180deg 240deg, 
+                {colors[4]} 240deg 300deg, 
+                {colors[5]} 300deg 360deg
+            )
+        """
 
+        # ඉලක්කම් පෙන්වන කොටස (Text labels)
+        # රෝදය කැරකෙන වේගය (Transition) තත්පර 4ක් ලෙස සකසා ඇත
         wheel_html = f"""
-        <div style="display: flex; flex-direction: column; align-items: center; padding: 50px;">
-            <div id="pointer" style="width: 0; height: 0; 
-                border-left: 20px solid transparent; border-right: 20px solid transparent;
-                border-top: 40px solid #333; margin-bottom: -10px; z-index: 10;">
-            </div>
-            <div id="wheel_container" style="
-                width: 350px; height: 350px; border-radius: 50%;
-                border: 8px solid #333; position: relative;
-                overflow: hidden; background: white;
-                transition: transform 5s cubic-bezier(0.15, 0, 0.15, 1);
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
+            <div style="width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 40px solid #333; z-index: 10; margin-bottom: -10px;"></div>
+            <div style="
+                width: 300px; 
+                height: 300px; 
+                border-radius: 50%; 
+                border: 10px solid #333;
+                background: {gradient};
+                position: relative;
+                transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1);
                 transform: rotate({rotation}deg);
+                display: flex;
+                align-items: center;
+                justify-content: center;
             ">
-                {wheel_segments}
-                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-                            width: 60px; height: 60px; background: white; border-radius: 50%;
-                            border: 4px solid #333; z-index: 5; display: flex; align-items: center; justify-content: center;">
-                    <b>SPIN</b>
+                <div style="position: absolute; width: 100%; height: 100%; font-size: 18px; font-weight: bold; color: white;">
+                    <div style="position: absolute; top: 10%; left: 40%; transform: rotate(0deg);">1000</div>
+                    <div style="position: absolute; top: 30%; right: 5%; transform: rotate(60deg);">2000</div>
+                    <div style="position: absolute; bottom: 30%; right: 5%; transform: rotate(120deg);">3000</div>
+                    <div style="position: absolute; bottom: 10%; left: 40%; transform: rotate(180deg);">4000</div>
+                    <div style="position: absolute; bottom: 30%; left: 5%; transform: rotate(240deg);">5000</div>
+                    <div style="position: absolute; top: 30%; left: 5%; transform: rotate(300deg);">6000</div>
+                </div>
+                <div style="width: 50px; height: 50px; background: white; border-radius: 50%; border: 4px solid #333; z-index: 5; display: flex; align-items: center; justify-content: center;">
+                    <b>GO</b>
                 </div>
             </div>
         </div>
         """
         
+        # HTML එක පෙන්වීම
         placeholder = st.empty()
         placeholder.markdown(wheel_html, unsafe_allow_html=True)
         
-        # කැරකෙනකම් තත්පර 5ක් ඉන්න
-        time.sleep(5)
+        # කැරකෙනකම් තත්පර 4ක් රැඳී සිටීම
+        time.sleep(4)
         
-        # ජයග්‍රාහකයා ගණනය කිරීම (අංශක ගණන අනුව)
+        # ප්‍රතිඵලය ගණනය කිරීම
         final_angle = rotation % 360
-        # Pointer එක තියෙන්නේ උඩ (0 deg). රෝදය කැරකෙන දිශාව අනුව index එක බලමු
-        # රෝදය clockwise කැරකෙන නිසා index එක ගණනය කරන්නේ මෙහෙමයි:
         winning_index = int(((360 - final_angle) % 360) / 60)
-        winner = prizes[winning_index]['val']
+        winner = prizes[winning_index]
 
         st.balloons()
-        st.markdown(f"<h1 style='text-align: center; color: green;'>දිනුම: Rs. {winner} !!! 🤑</h1>", unsafe_allow_html=True)
+        st.success(f"සුභ පැතුම්! ඔබ Rs. {winner} දිනාගත්තා! 🤑")
 
-# Run function
-high_speed_wheel()
+# App එක පෙන්වීමට
+mega_wheel()
